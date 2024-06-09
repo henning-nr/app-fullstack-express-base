@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const url = "https://silver-broccoli-9rvrr9w799ph7v6w-4000.app.github.dev/users/"
+const url = "https://silver-broccoli-9rvrr9w799ph7v6w-4000.app.github.dev/pets/"
 
-/* GET users listing. */
+/* GET pets listing. */
 router.get('/', function (req, res, next) {
 
   fetch(url, { method: 'GET' })
@@ -13,24 +13,24 @@ router.get('/', function (req, res, next) {
       }
       return res.json()
     })
-    .then((users) => {
-      let title = "Gestão de Usuários"
-      let cols = ["Id", "Nome", "Senha", "Email", "Telefone", "Ações"]
-      res.render('layout', {body: 'pages/users', title, users, cols, error: "" })
+    .then((pets) => {
+      let title = "Gestão de Pets"
+      let cols = ["Id", "Nome", "Raça", "Cor", "Sexo", "Ações"]
+      res.render('layout', {body: 'pages/pets', title, pets, cols, error: "" })
     })
     .catch((error) => {
       console.log('Erro', error)
-      res.render('layout', { body: 'pages/users', title: "Gestão de Usuários", error })
+      res.render('layout', { body: 'pages/pets', title, error })
     })
 });
 
-// POST new user
+// POST new pet
 router.post("/", (req, res) => {
-  const { username, password, email, phone } = req.body
-  fetch(url + '/register', {
+  const { name, race, colour, gender } = req.body
+  fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password, email, phone })
+    body: JSON.stringify({ name, race, colour, gender })
   }).then(async (res) => {
     if (!res.ok) {
       const err = await res.json()
@@ -38,22 +38,22 @@ router.post("/", (req, res) => {
     }
     return res.json()
   })
-    .then((user) => {
-      res.send(user)
+    .then((pet) => {
+      res.send(pet)
     })
     .catch((error) => {
       res.status(500).send(error)
     })
 })
 
-// UPDATE user
+// UPDATE pet
 router.put("/:id", (req, res) => {
   const { id } = req.params
-  const { username, password, email, phone } = req.body
+  const { name, race, colour, gender } = req.body
   fetch(url+id, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password, email, phone })
+    body: JSON.stringify({ name, race, colour, gender })
   }).then(async (res) => {
     if (!res.ok) {
       const err = await res.json()
@@ -61,15 +61,15 @@ router.put("/:id", (req, res) => {
     }
     return res.json()
   })
-    .then((user) => {
-      res.send(user)
+    .then((pet) => {
+      res.send(pet)
     })
     .catch((error) => {
       res.status(500).send(error)
     })
 })
 
-// REMOVE user
+// REMOVE pet
 router.delete("/:id", (req, res) => {
   const { id } = req.params
   fetch(url+id, {
@@ -81,15 +81,15 @@ router.delete("/:id", (req, res) => {
     }
     return res.json()
   })
-    .then((user) => {
-      res.send(user)
+    .then((pet) => {
+      res.send(pet)
     })
     .catch((error) => {
       res.status(500).send(error)
     })
 })
 
-// GET user by id
+// GET pet by id
 router.get("/:id", (req, res) => {
   const { id } = req.params
   fetch(url+id, {
@@ -101,8 +101,8 @@ router.get("/:id", (req, res) => {
     }
     return res.json()
   })
-    .then((user) => {
-      res.send(user)
+    .then((pet) => {
+      res.send(pet)
     })
     .catch((error) => {
       res.status(500).send(error)
