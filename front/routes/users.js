@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const url = "https://silver-broccoli-9rvrr9w799ph7v6w-4000.app.github.dev/users/"
+const url = "https://fictional-sniffle-jgr5v95wrvhqpw7-4000.app.github.dev/users/"
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
