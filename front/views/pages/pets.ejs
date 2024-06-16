@@ -19,7 +19,7 @@
 
 <%if(error){%>
     <span>
-        <%=error%>
+        <%=JSON.stringify(error)%>
     </span>
     <%}%>
 
@@ -103,7 +103,7 @@
                     .then((pet) => {
                         window.location.reload()
                     })
-                    .catch((error) => { document.getElementById('error').innerText = error })
+                    .catch((error) => { document.getElementById('error').innerText = JSON.stringify(error) })
             }
 
             // CHECAR ERROS NA RESPOSTA DA REQUISIÇÃO

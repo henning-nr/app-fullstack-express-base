@@ -1,11 +1,20 @@
 var express = require('express');
 var router = express.Router();
-const url = "https://silver-broccoli-9rvrr9w799ph7v6w-4000.app.github.dev/users/"
+const url = "https://fictional-sniffle-jgr5v95wrvhqpw7-4000.app.github.dev/users/"
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
+  let title = "Gestão de Usuários"
+  let cols = ["Id", "Nome", "Senha", "Email", "Telefone", "Ações"]
 
-  fetch(url, { method: 'GET' })
+  const token = req.session.token || ""
+
+  fetch(url, { method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+   })
     .then(async (res) => {
       if (!res.ok) {
         const err = await res.json()
@@ -14,13 +23,11 @@ router.get('/', function (req, res, next) {
       return res.json()
     })
     .then((users) => {
-      let title = "Gestão de Usuários"
-      let cols = ["Id", "Nome", "Senha", "Email", "Telefone", "Ações"]
-      res.render('layout', {body: 'pages/users', title, users, cols, error: "" })
+      res.render('layout', {body: 'pages/users', title, users, cols, error: "", name: "" })
     })
     .catch((error) => {
       console.log('Erro', error)
-      res.render('layout', { body: 'pages/users', title: "Gestão de Usuários", error })
+      res.redirect('/login')
     })
 });
 

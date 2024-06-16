@@ -1,11 +1,19 @@
 var express = require('express');
 var router = express.Router();
-const url = "https://silver-broccoli-9rvrr9w799ph7v6w-4000.app.github.dev/pets/"
+const url = "https://fictional-sniffle-jgr5v95wrvhqpw7-4000.app.github.dev/pets/"
 
 /* GET pets listing. */
 router.get('/', function (req, res, next) {
-
-  fetch(url, { method: 'GET' })
+  let title = "Gestão de Pets"
+  let cols = ["Id", "Nome", "Raça", "Cor", "Sexo", "Ações"]
+  const token = req.session.token || ""
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
     .then(async (res) => {
       if (!res.ok) {
         const err = await res.json()
@@ -14,22 +22,25 @@ router.get('/', function (req, res, next) {
       return res.json()
     })
     .then((pets) => {
-      let title = "Gestão de Pets"
-      let cols = ["Id", "Nome", "Raça", "Cor", "Sexo", "Ações"]
-      res.render('layout', {body: 'pages/pets', title, pets, cols, error: "" })
+      res.render('layout', { body: 'pages/pets', title, pets, cols, error: "" })
     })
     .catch((error) => {
       console.log('Erro', error)
-      res.render('layout', { body: 'pages/pets', title, error })
+      res.redirect('/login')
     })
 });
 
 // POST new pet
 router.post("/", (req, res) => {
   const { name, race, colour, gender } = req.body
+  const token = req.session.token || ""
   fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`
+
+     },
     body: JSON.stringify({ name, race, colour, gender })
   }).then(async (res) => {
     if (!res.ok) {
@@ -50,7 +61,7 @@ router.post("/", (req, res) => {
 router.put("/:id", (req, res) => {
   const { id } = req.params
   const { name, race, colour, gender } = req.body
-  fetch(url+id, {
+  fetch(url + id, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, race, colour, gender })
@@ -72,8 +83,12 @@ router.put("/:id", (req, res) => {
 // REMOVE pet
 router.delete("/:id", (req, res) => {
   const { id } = req.params
-  fetch(url+id, {
-    method: "DELETE"
+  const token = req.session.token || ""
+  fetch(url + id, {
+    method: "DELETE",
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   }).then(async (res) => {
     if (!res.ok) {
       const err = await res.json()
@@ -92,8 +107,13 @@ router.delete("/:id", (req, res) => {
 // GET pet by id
 router.get("/:id", (req, res) => {
   const { id } = req.params
-  fetch(url+id, {
-    method: "GET"
+  const token = req.session.token || ""
+  fetch(url + id, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
   }).then(async (res) => {
     if (!res.ok) {
       const err = await res.json()
