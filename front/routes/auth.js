@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
         .then((data) => {
             console.log('veio', data)
             req.session.token = data.token
-            res.redirect('/pets')
+            res.redirect('/users')
         })
         .catch((error) => {
             console.log('Erro', error)
