@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const url = "https://symmetrical-space-parakeet-wr9rw66gxvjq29p7p-4000.app.github.dev/pets/"
+const url = "https://symmetrical-space-parakeet-wr9rw66gxvjq29p7p-4000.app.github.dev/games/"
 
-/* GET pets listing. */
+/* GET games listing. */
 router.get('/', function (req, res, next) {
-  let title = "Gestão de Pets"
-  let cols = ["Id", "Nome", "Raça", "Cor", "Sexo", "Ações"]
+  let title = "Gestão de Jogos"
+  let cols = ["Id", "Nome", "Preço", "Data", "Ações"]
   const token = req.session.token || ""
   fetch(url, {
     method: 'GET',
@@ -21,8 +21,8 @@ router.get('/', function (req, res, next) {
       }
       return res.json()
     })
-    .then((pets) => {
-      res.render('layout', { body: 'pages/pets', title, pets, cols, error: "" })
+    .then((games) => {
+      res.render('layout', { body: 'pages/games', title, games, cols, error: "" })
     })
     .catch((error) => {
       console.log('Erro', error)
@@ -30,18 +30,17 @@ router.get('/', function (req, res, next) {
     })
 });
 
-// POST new pet
+// POST new game
 router.post("/", (req, res) => {
-  const { name, race, colour, gender } = req.body
+  const { name, price, date } = req.body
   const token = req.session.token || ""
   fetch(url, {
     method: "POST",
     headers: { 
       "Content-Type": "application/json",
       'Authorization': `Bearer ${token}`
-
      },
-    body: JSON.stringify({ name, race, colour, gender })
+    body: JSON.stringify({ name, price, date })
   }).then(async (res) => {
     if (!res.ok) {
       const err = await res.json()
@@ -49,22 +48,26 @@ router.post("/", (req, res) => {
     }
     return res.json()
   })
-    .then((pet) => {
-      res.send(pet)
+    .then((game) => {
+      res.send(game)
     })
     .catch((error) => {
       res.status(500).send(error)
     })
 })
 
-// UPDATE pet
+// UPDATE game
 router.put("/:id", (req, res) => {
   const { id } = req.params
-  const { name, race, colour, gender } = req.body
+  const { name, price, date } = req.body
+  const token = req.session.token || ""
   fetch(url + id, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, race, colour, gender })
+    headers: { 
+      "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`
+     },
+    body: JSON.stringify({ name, price, date })
   }).then(async (res) => {
     if (!res.ok) {
       const err = await res.json()
@@ -72,15 +75,15 @@ router.put("/:id", (req, res) => {
     }
     return res.json()
   })
-    .then((pet) => {
-      res.send(pet)
+    .then((game) => {
+      res.send(game)
     })
     .catch((error) => {
       res.status(500).send(error)
     })
 })
 
-// REMOVE pet
+// REMOVE game
 router.delete("/:id", (req, res) => {
   const { id } = req.params
   const token = req.session.token || ""
@@ -96,15 +99,15 @@ router.delete("/:id", (req, res) => {
     }
     return res.json()
   })
-    .then((pet) => {
-      res.send(pet)
+    .then((game) => {
+      res.send(game)
     })
     .catch((error) => {
       res.status(500).send(error)
     })
 })
 
-// GET pet by id
+// GET game by id
 router.get("/:id", (req, res) => {
   const { id } = req.params
   const token = req.session.token || ""
@@ -121,8 +124,8 @@ router.get("/:id", (req, res) => {
     }
     return res.json()
   })
-    .then((pet) => {
-      res.send(pet)
+    .then((game) => {
+      res.send(game)
     })
     .catch((error) => {
       res.status(500).send(error)

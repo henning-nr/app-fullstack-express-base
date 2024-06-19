@@ -1,0 +1,124 @@
+<h1>
+    <%=title%>
+</h1>
+
+<form id="gameForm">
+    <input required type="hidden" name="id" id="id">
+    <label for="name">Nome</label>
+    <input required name="name" id="name" type="text"><br>
+    <label for="price">Preço</label>
+    <input required name="price" id="price" type="number" step="0.01"><br>
+    <label for="date">Data</label>
+    <input required name="date" id="date" type="date">
+    <button type="submit">Enviar</button>
+    <button type="reset">Cancelar</button>
+</form>
+<span id="error"></span>
+
+<%if(error){%>
+    <span>
+        <%=JSON.stringify(error)%>
+    </span>
+<%}%>
+
+<table>
+    <thead>
+        <tr>
+            <%for(let col of cols){%>
+                <th>
+                    <%=col%>
+                </th>
+            <%}%>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%for(let game of games){%>
+            <tr>
+                <%for(let prop in game){%>
+                    <td>
+                        <%=game[prop]%>
+                    </td>
+                <%}%>
+                <td>
+                    <button onclick="editGame('<%=game.id%>')">Editar</button>
+                    <button onclick="deleteGame('<%=game.id%>')">Deletar</button>
+                </td>
+            </tr>
+        <%}%>
+    </tbody>
+</table>
+
+<script>
+    const form = document.getElementById('gameForm')
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+        const game = mountDataForm()
+        let id = game.id
+        let METHOD = id ? 'PUT' : 'POST';
+        let URL = id ? `/games/${id}` : '/games';
+        createOrUpdate(game, URL, METHOD)
+    })
+
+    // CRIAR OU ATUALIZAR JOGO
+    function createOrUpdate(game, URL, METHOD) {
+        fetch(URL, {
+            method: METHOD,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(game)
+        })
+        .then(async (res) => { return await checkError(res) })
+        .then((game) => {
+            form.reset()
+            window.location.reload()
+        })
+        .catch((error) => { document.getElementById('error').innerText = error })
+    }
+
+    // BUSCAR JOGO A SER EDITADO PELO ID E CARREGAR NOS INPUTS DO FORM
+    function editGame(id) {
+        fetch("/games/" + id, {
+            method: "GET"
+        })
+        .then(async (res) => { return await checkError(res) })
+        .then((game) => {
+            for (let prop in game) {
+                const input = document.querySelector(`input[name="${prop}"]`);
+                input.value = game[prop]
+            }
+        })
+        .catch((error) => { document.getElementById('error').innerText = error })
+    }
+
+    // DELETAR UM JOGO PELO ID
+    function deleteGame(id) {
+        fetch("/games/" + id, {
+            method: "DELETE"
+        })
+        .then(async (res) => { return await checkError(res) })
+        .then((game) => {
+            window.location.reload()
+        })
+        .catch((error) => { document.getElementById('error').innerText = JSON.stringify(error) })
+    }
+
+    // CHECAR ERROS NA RESPOSTA DA REQUISIÇÃO
+    async function checkError(res) {
+        if (!res.ok) {
+            const err = await res.json()
+            throw err
+        }
+        return res.json()
+    }
+
+    // MONTAR DADOS DO FORMULÁRIO USANDO FORMDATA
+    function mountDataForm() {
+        const formData = new FormData(form)
+        const game = {}
+        formData.forEach((v, k) => {
+            game[k] = v
+        })
+        return game
+    }
+
+</script>
