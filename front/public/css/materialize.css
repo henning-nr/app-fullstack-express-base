@@ -6,7 +6,7 @@
 
  body {
   background-image: url('https://rockcontent.com/br/wp-content/uploads/sites/2/2022/10/petshop-rock-1024x538.png.webp');');
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
