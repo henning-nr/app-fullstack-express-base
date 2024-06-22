@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const url = "https://symmetrical-space-parakeet-wr9rw66gxvjq29p7p-4000.app.github.dev/auth/login";
+const url = "https://ubiquitous-dollop-pj74g4vrj7qvh6q47-4000.app.github.dev/auth/login";
 
 /* GET home page. /
 
