@@ -5,10 +5,12 @@
  */
 
  body {
-  background-image: url('https://www.area17.com.br/admin/fotos/estabelecimentos/chokito-petshop-recife-45283_61095b750dcd4.jpg');
-  background-size: 100px auto;
+  background-image: url('https://www.area17.com.br/admin/fotos/estabelecimentos/chokito-petshop-recife-45283_61095b750dcd4.jpg');');
+  background-size: contain;
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat;
+  height: 50vh;
+  width: 100%;
 }
 
 .materialize-red {
