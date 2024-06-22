@@ -1,39 +1,46 @@
 var express = require('express');
 var router = express.Router();
 
+const url = "https://symmetrical-space-parakeet-wr9rw66gxvjq29p7p-4000.app.github.dev/auth/login";
 
-const url = "https://symmetrical-space-parakeet-wr9rw66gxvjq29p7p-4000.app.github.dev/auth/login"
 
-/* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('layout', { body: 'pages/login', title: 'Express', error: ''});
+    res.render('pages/login', {  title: 'Express', error: ''});
 });
 
 router.post('/', (req, res) => {
-    const { username, password } = req.body
+    const { username, password } = req.body;
     fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
     })
-        .then(async (res) => {
-            if (!res.ok) {
-                const err = await res.json()
-                console.log('err', err)
-                throw err
-            }
-            return res.json()
-        })
-        .then((data) => {
-            console.log('veio', data)
-            req.session.token = data.token
-            res.redirect('/users')
-        })
-        .catch((error) => {
-            console.log('Erro', error)
-            res.render('layout', { body: 'pages/login', title: 'Express', error,})
-        })
-})
+    .then(async (res) => {
+        if (!res.ok) {
+            const err = await res.json();
+            console.log('err', err);
+            throw err;
+        }
+        return res.json();
+    })
+    .then((data) => {
+        console.log('veio', data);
+        req.session.token = data.token;
+        res.redirect('/users');
+    })
+    .catch((error) => {
+        console.log('Erro', error);
+        res.render('layout', { body: 'pages/login', title: 'Express', error });
+    });
+});
+
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.render('layout', { body: 'pages/login', title: 'Express', error: 'Logout failed, please try again.' });
+        }
+        res.redirect('/');
+    });
+});
 
 module.exports = router;
-//oi teste

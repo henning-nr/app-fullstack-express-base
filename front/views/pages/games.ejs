@@ -1,55 +1,78 @@
-<h1>
-    <%=title%>
-</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Game Management</title>
 
-<form id="gameForm">
-    <input required type="hidden" name="id" id="id">
-    <label for="name">Nome</label>
-    <input required name="name" id="name" type="text"><br>
-    <label for="price">Preço</label>
-    <input required name="price" id="price" type="number" step="0.01"><br>
-    <label for="date">Data</label>
-    <input required name="date" id="date" type="date">
-    <button type="submit">Enviar</button>
-    <button type="reset">Cancelar</button>
-</form>
-<span id="error"></span>
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
 
-<%if(error){%>
-    <span>
-        <%=JSON.stringify(error)%>
-    </span>
-<%}%>
+  <div class="container">
+    <h1><%=title%></h1>
 
-<table>
-    <thead>
-        <tr>
-            <%for(let col of cols){%>
-                <th>
-                    <%=col%>
-                </th>
-            <%}%>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        <%for(let game of games){%>
+    <form id="gameForm">
+        <input required type="hidden" name="id" id="id">
+        <label for="name">Nome</label>
+        <input required name="name" id="name" type="text"><br>
+        <label for="price">Preço</label>
+        <input required name="price" id="price" type="number" step="0.01"><br>
+        <label for="date">Data</label>
+        <input required name="date" id="date" type="date">
+        <button type="submit" class="btn waves-effect waves-light">
+            <i class="material-icons left">send</i> Enviar
+        </button>
+        <button type="reset" class="btn red waves-effect waves-light">
+            <i class="material-icons left">cancel</i> Cancelar
+        </button>
+    </form>
+    <span id="error"></span>
+
+    <%if(error){%>
+        <span>
+            <%=JSON.stringify(error)%>
+        </span>
+    <%}%>
+
+    <table class="striped">
+        <thead>
             <tr>
-                <%for(let prop in game){%>
-                    <td>
-                        <%=game[prop]%>
-                    </td>
+                <%for(let col of cols){%>
+                    <th><%=col%></th>
                 <%}%>
-                <td>
-                    <button onclick="editGame('<%=game.id%>')">Editar</button>
-                    <button onclick="deleteGame('<%=game.id%>')">Deletar</button>
-                </td>
+                <th>Ações</th>
             </tr>
-        <%}%>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <%for(let game of games){%>
+                <tr>
+                    <%for(let prop in game){%>
+                        <td><%=game[prop]%></td>
+                    <%}%>
+                    <td>
+                        <button class="btn blue waves-effect waves-light" onclick="editGame('<%=game.id%>')">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button class="btn red waves-effect waves-light" onclick="deleteGame('<%=game.id%>')">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+            <%}%>
+        </tbody>
+    </table>
+  </div>
 
-<script>
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="js/init.js"></script>
+
+  <script>
     const form = document.getElementById('gameForm')
     form.addEventListener("submit", (e) => {
         e.preventDefault()
@@ -120,5 +143,6 @@
         })
         return game
     }
-
-</script>
+  </script>
+</body>
+</html>
