@@ -3,27 +3,26 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Pet Management</title>
+  <title>Game Management</title>
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
 
   <div class="container">
     <h1><%=title%></h1>
 
-    <form id="petForm">
+    <form id="gameForm">
         <input required type="hidden" name="id" id="id">
         <label for="name">Nome</label>
         <input required name="name" id="name" type="text"><br>
-        <label for="race">Raça</label>
-        <input required name="race" id="race" type="text"><br>
-        <label for="colour">Cor</label>
-        <input required name="colour" id="colour" type="text"><br>
-        <label for="gender">Sexo</label>
-        <input required name="gender" id="gender" type="text">
+        <label for="price">Preço</label>
+        <input required name="price" id="price" type="number" step="0.01"><br>
+        <label for="date">Data</label>
+        <input required name="date" id="date" type="date">
         <button type="submit" class="btn waves-effect waves-light">
             <i class="material-icons left">send</i> Enviar
         </button>
@@ -49,16 +48,16 @@
             </tr>
         </thead>
         <tbody>
-            <%for(let pet of pets){%>
+            <%for(let game of games){%>
                 <tr>
-                    <%for(let prop in pet){%>
-                        <td><%=pet[prop]%></td>
+                    <%for(let prop in game){%>
+                        <td><%=game[prop]%></td>
                     <%}%>
                     <td>
-                        <button class="btn blue waves-effect waves-light" onclick="editPet('<%=pet.id%>')">
+                        <button class="btn blue waves-effect waves-light" onclick="editGame('<%=game.id%>')">
                             <i class="material-icons">edit</i>
                         </button>
-                        <button class="btn red waves-effect waves-light" onclick="deletePet('<%=pet.id%>')">
+                        <button class="btn red waves-effect waves-light" onclick="deleteGame('<%=game.id%>')">
                             <i class="material-icons">delete</i>
                         </button>
                     </td>
@@ -71,59 +70,56 @@
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="js/init.js"></script>
+
   <script>
-    const form = document.getElementById('petForm')
+    const form = document.getElementById('gameForm')
     form.addEventListener("submit", (e) => {
         e.preventDefault()
-        const pet = mountDataForm()
-        let id = pet.id
+        const game = mountDataForm()
+        let id = game.id
         let METHOD = id ? 'PUT' : 'POST';
-        let URL = id ? `/pets/${id}` : '/pets';
-        createOrUpdate(pet, URL, METHOD)
+        let URL = id ? `/games/${id}` : '/games';
+        createOrUpdate(game, URL, METHOD)
     })
 
-    // CRIAR OU ATUALIZAR PET
-    function createOrUpdate(pet, URL, METHOD) {
-        console.log(pet)
+    // CRIAR OU ATUALIZAR JOGO
+    function createOrUpdate(game, URL, METHOD) {
         fetch(URL, {
             method: METHOD,
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(pet)
+            body: JSON.stringify(game)
         })
         .then(async (res) => { return await checkError(res) })
-        .then((pet) => {
+        .then((game) => {
             form.reset()
             window.location.reload()
         })
-        .catch((error) => { document.getElementById('error').innerText = JSON.stringify(error) })
+        .catch((error) => { document.getElementById('error').innerText = error })
     }
 
-    // BUSCAR PET A SER EDITADO PELO ID E CARREGAR NOS INPUTS DO FORM
-    function editPet(id) {
-        console.log(id)
-        fetch("/pets/" + id, {
+    // BUSCAR JOGO A SER EDITADO PELO ID E CARREGAR NOS INPUTS DO FORM
+    function editGame(id) {
+        fetch("/games/" + id, {
             method: "GET"
         })
         .then(async (res) => { return await checkError(res) })
-        .then((pet) => {
-            console.log('retornou o PET', pet)
-            for (let prop in pet) {
+        .then((game) => {
+            for (let prop in game) {
                 const input = document.querySelector(`input[name="${prop}"]`);
-                if (input) {
-                    input.value = pet[prop]
-                }
+                input.value = game[prop]
             }
         })
-        .catch((error) => { document.getElementById('error').innerText = JSON.stringify(error) })
+        .catch((error) => { document.getElementById('error').innerText = error })
     }
 
-    // DELETAR UM PET PELO ID
-    function deletePet(id) {
-        fetch("/pets/" + id, {
+    // DELETAR UM JOGO PELO ID
+    function deleteGame(id) {
+        fetch("/games/" + id, {
             method: "DELETE"
         })
         .then(async (res) => { return await checkError(res) })
-        .then((pet) => {
+        .then((game) => {
             window.location.reload()
         })
         .catch((error) => { document.getElementById('error').innerText = JSON.stringify(error) })
@@ -141,12 +137,11 @@
     // MONTAR DADOS DO FORMULÁRIO USANDO FORMDATA
     function mountDataForm() {
         const formData = new FormData(form)
-        const pet = {}
+        const game = {}
         formData.forEach((v, k) => {
-            pet[k] = v
+            game[k] = v
         })
-        console.log('Dados do formulário:', pet)
-        return pet
+        return game
     }
   </script>
 </body>

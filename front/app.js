@@ -23,13 +23,17 @@ app.use(session({
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var petsRouter = require('./routes/pets');
+var gamesRouter = require('./routes/games');
 var authRouter = require('./routes/auth');
+var logoutRouter = require('./routes/logout');
 
 // DEFININDO ENDPOINTS PARA ROTAS IMPORTADAS
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/pets', petsRouter);
+app.use('/games', gamesRouter);
 app.use('/login', authRouter);
+app.use('/logout', logoutRouter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -59,3 +63,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
