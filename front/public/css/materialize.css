@@ -5,12 +5,10 @@
  */
 
  body {
-  background-image: url('https://www.area17.com.br/admin/fotos/estabelecimentos/chokito-petshop-recife-45283_61095b750dcd4.jpg');');
+  background-image: url('https://rockcontent.com/br/wp-content/uploads/sites/2/2022/10/petshop-rock-1024x538.png.webp');');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh;
-  width: 50%;
 }
 
 .materialize-red {
