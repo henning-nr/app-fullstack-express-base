@@ -31,12 +31,14 @@ app.use(session({
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var petsRouter = require('./routes/pets');
+var gamesRouter = require('./routes/games');
 var authRouter = require('./routes/auth');
 
 // DEFINI OS ENDPOINT//RECURSO PARA AS ROTAS
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/pets', petsRouter);
+app.use('/games', gamesRouter);
 app.use('/auth', limiter, authRouter);
 
 // view engine setup

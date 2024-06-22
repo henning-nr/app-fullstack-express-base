@@ -23,12 +23,14 @@ app.use(session({
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var petsRouter = require('./routes/pets');
+var gamesRouter = require('./routes/games');
 var authRouter = require('./routes/auth');
 
 // DEFININDO ENDPOINTS PARA ROTAS IMPORTADAS
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/pets', petsRouter);
+app.use('/games', gamesRouter);
 app.use('/login', authRouter);
 
 // view engine setup
